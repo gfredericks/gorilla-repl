@@ -19,7 +19,13 @@ var evaluator = function () {
         var id = UUID.generate();
         // store the evaluation ID and the segment ID in the evaluationMap
         self.evaluationMap[id] = d.segmentID;
+        console.log("Running " + id);
         repl.execute(d.code, id);
+    });
+
+    // this interrupts all evaluations
+    eventBus.on("evaluator:interrupt", function () {
+        _.each(self.evaluationMap, function (v, k) {console.log("Interrupting " + k); repl.interrupt(k)});
     });
 
     // handle the various different nREPL responses

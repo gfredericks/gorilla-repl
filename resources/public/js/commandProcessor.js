@@ -70,6 +70,15 @@ commandList = [
         }
     },
     {
+        name: "command:evaluator:interrupt",
+        desc: "Attempt to interrupt evaluation.",
+        showInMenu: true,
+        kb: combo('g', 'c'),
+        action: function () {
+            eventBus.trigger("evaluator:interrupt");
+        }
+    },
+    {
         name: "command:worksheet:completions",
         desc: "Show possible auto-completions.",
         showInMenu: true,
