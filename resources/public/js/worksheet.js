@@ -69,6 +69,10 @@ var worksheet = function () {
             }).join('\n');
     };
 
+    self.backgroundClicked = function () {
+        console.log("Clicked");
+    };
+
     // ** Segment management helpers **
 
     self.segmentIndexForID = function (id) {

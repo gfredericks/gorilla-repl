@@ -75,10 +75,6 @@ var codemirrorVM = function (id, initialContents, contentType) {
         eventBus.trigger("worksheet:deleteBackspace")
     };
 
-    self.notifyClicked = function () {
-        eventBus.trigger("worksheet:segment-clicked", {id: self.id})
-    };
-
     return self;
 };
 
@@ -159,9 +155,6 @@ ko.bindingHandlers.codemirror = {
         cm.on('change', function (editor) {
             var value = valueAccessor();
             value.contents(editor.getValue());
-        });
-        cm.on('mousedown', function () {
-            valueAccessor().notifyClicked();
         });
         // store the editor object on the viewmodel
         valueAccessor().codeMirror = cm;

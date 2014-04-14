@@ -53,6 +53,9 @@ var codeSegment = function (contents, consoleText, output) {
         self.output("");
     };
 
+    self.handleClick = function () {
+        eventBus.trigger("worksheet:segment-clicked", {id: self.id});
+    };
 
     // activation and deactivation - these control whether the segment has the "cursor" outline, and focus
     // the content component.
@@ -121,7 +124,7 @@ var freeSegment = function (contents) {
     }).extend({throttle: 250});
 
     self.handleClick = function () {
-        eventBus.trigger("worksheet:segment-clicked", {id: self.id})
+        eventBus.trigger("worksheet:segment-clicked", {id: self.id});
     };
 
     // activation and deactivation - these control whether the segment has the "cursor" outline, and focus

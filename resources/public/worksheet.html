@@ -56,7 +56,7 @@
 
     <title data-bind="text: title">Gorilla REPL</title>
 </head>
-<body>
+<body data-bind="click: worksheet().backgroundClicked">
 
 <!-- The page stub -->
 <div class="status" data-bind="visible: (status() !== ''), html: status">Loading ...</div>
@@ -88,7 +88,7 @@
 
 <script type="text/html" id="code-segment-template">
     <div class="segment code running"
-         data-bind="css: {selected: active(), 'code-warning': warningIndicator() && active(), running: runningIndicator, live: liveEvaluationMode() && active()}, attr: {id: id}">
+         data-bind="css: {selected: active(), 'code-warning': warningIndicator() && active(), running: runningIndicator, live: liveEvaluationMode() && active()}, attr: {id: id}, click: handleClick, clickBubble: false">
 
         <div class="segment-main">
             <textarea class="codeTextArea mousetrap" data-bind="codemirror: content"></textarea>
@@ -105,7 +105,7 @@
 </script>
 
 <script type="text/html" id="free-segment-template">
-    <div class="segment free" data-bind="css: {selected: active()}, attr: {id: id}, click: handleClick">
+    <div class="segment free" data-bind="css: {selected: active()}, attr: {id: id}, click: handleClick, clickBubble: false">
         <div class="segment-main">
             <div class="free-preview" data-bind="mathJaxViewer: renderedContent, visible: !markupVisible()"></div>
             <div class="free-markup" data-bind="visible: markupVisible">
