@@ -2,6 +2,7 @@
 
 ## Version 0.3.?
 
+- Export worksheets to standalone HTML (thanks to @shriphani).
 - Renderer handles Cons sequences correctly.
 - Change default Linux command key to alt.
 - Add code to support online viewer.
