@@ -17,9 +17,7 @@
                  [gorilla-renderable "1.0.0"]
                  [hiccup "1.0.5"]
                  [instaparse "1.3.1"]
-                 [markdown-clj "0.9.41"]
-                 [org.clojure/data.codec "0.1.0"]
-                 [commons-lang/commons-lang "2.6"]]
+                 [org.clojure/data.codec "0.1.0"]]
   :main ^:skip-aot gorilla-repl.core
   :target-path "target/%s"
   :plugins [[lein-ring "0.8.7"]]

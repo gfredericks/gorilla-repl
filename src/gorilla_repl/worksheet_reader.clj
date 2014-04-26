@@ -3,8 +3,7 @@
             [clojure.java.io :as io]
             [clojure.string :as string]
             [instaparse.core :as insta]
-            [hiccup.core :refer :all])
-  (:import [org.apache.commons.lang StringEscapeUtils]))
+            [hiccup.core :refer :all]))
 
 (defn uncomment
   [xs]
