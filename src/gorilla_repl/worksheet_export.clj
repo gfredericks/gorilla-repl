@@ -1,4 +1,4 @@
-(ns gorilla-repl.worksheet-reader
+(ns gorilla-repl.worksheet-export
   (:require [cheshire.core :refer :all]
             [clojure.java.io :as io]
             [clojure.string :as string]
@@ -83,7 +83,7 @@
 (defn render-clojure-code
   [a-code-segment]
   (html [:div {:class "segment-main"}
-         [:pre
+         [:pre {:data-lang "clojure"}
           [:code.clojure a-code-segment]]]))
 
 (defn render-worksheet
@@ -115,45 +115,41 @@
             });
             MathJax.Hub.Configured();"]
           [:script {:type "text/javascript"}
-           (slurp
-             (io/resource "public/jslib/markdown/Markdown.Converter.js"))]
+           (slurp (io/resource "public/jslib/codemirror-3.20/addon/runmode/runmode-standalone.js"))]
           [:script {:type "text/javascript"}
-           (slurp
-             (io/resource "public/jslib/markdown/Markdown.Sanitizer.js"))]
+           (slurp (io/resource "public/jslib/codemirror-3.20/addon/runmode/colorize.js"))]
           [:script {:type "text/javascript"}
-           (slurp
-             (io/resource "public/jslib/d3/d3.v3.min.js"))]
+           (slurp (io/resource "public/jslib/codemirror-3.20/mode/clojure/clojure.js"))]
           [:script {:type "text/javascript"}
-           (slurp
-             (io/resource "public/jslib/d3/d3.geo.projection.min.js"))]
+           (slurp (io/resource "public/jslib/markdown/Markdown.Converter.js"))]
           [:script {:type "text/javascript"}
-           (slurp
-             (io/resource "public/jslib/vega/vega.1.3.3.min.js"))]
+           (slurp (io/resource "public/jslib/markdown/Markdown.Sanitizer.js"))]
           [:script {:type "text/javascript"}
-           (slurp
-             (io/resource "public/jslib/uuid/uuid.core.js"))]
+           (slurp (io/resource "public/jslib/d3/d3.v3.min.js"))]
           [:script {:type "text/javascript"}
-           (slurp
-             (io/resource "public/js/renderer.js"))]
+           (slurp (io/resource "public/jslib/d3/d3.geo.projection.min.js"))]
           [:script {:type "text/javascript"}
-           "var converter = new Markdown.Converter();"]
-          [:style (slurp
-                    (io/resource "public/css/worksheet.css"))]]
+           (slurp (io/resource "public/jslib/vega/vega.1.3.3.min.js"))]
+          [:script {:type "text/javascript"}
+           (slurp (io/resource "public/jslib/uuid/uuid.core.js"))]
+          [:script {:type "text/javascript"} (slurp (io/resource "public/js/renderer.js"))]
+          [:script {:type "text/javascript"} "var converter = new Markdown.Converter();"]
+          [:style (slurp (io/resource "public/css/worksheet.css"))]
+          [:style (slurp (io/resource "public/css/output.css"))]
+          [:style (slurp (io/resource "public/jslib/codemirror-3.20/lib/codemirror.css"))]]
+
          [:body
           [:div#contents segments]
-          [:script "MathJax.Hub.Queue([\"Typeset\",MathJax.Hub]);"]]]))
+          [:script "MathJax.Hub.Queue([\"Typeset\",MathJax.Hub]);
+                    CodeMirror.colorize();"]]]))
 
 (defn worksheet-str->standalone-html
   [worksheet]
   (->> (gorilla-worksheet worksheet)
        (insta/transform
          {:worksheet            (fn [& xs] (render-worksheet (rest xs)))
-
           :segmentWithBlankLine (fn [& xs] (first xs))
-
-          :segment              (fn [& xs]
-                                  (first xs))
-
+          :segment              (fn [& xs] (first xs))
           :freeSegment          (fn [& xs]
                                   (render-free-segment
                                     (uncomment
@@ -161,7 +157,6 @@
                                         (remove-open-close-tags xs
                                                                 :freeSegmentOpenTag
                                                                 :freeSegmentCloseTag)))))
-
           :codeSegment          (fn [& xs]
                                   (let [code-segment
                                         (remove-open-close-tags xs
@@ -175,7 +170,6 @@
                                              (first code-segment))
                                            (rest code-segment))
                                          code-segment)])))
-
           :consoleSection       (fn [& xs]
                                   (html
                                     [:div.console-text
@@ -184,7 +178,6 @@
                                          (remove-open-close-tags xs
                                                                  :consoleOpenTag
                                                                  :consoleCloseTag)))]))
-
           :outputSection        (fn [& xs]
                                   (html
                                     [:div.output
@@ -203,7 +196,6 @@
                                                                       :outputOpenTag
                                                                       :outputCloseTag))))
                                         "), ele)")]]))
-
           :stringNoDelim        (fn [& xs]
                                   (apply str (map second xs)))})))
 

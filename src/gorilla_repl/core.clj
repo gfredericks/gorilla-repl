@@ -17,7 +17,7 @@
             [gorilla-repl.render-values-mw :as render-mw]
             [gorilla-repl.renderer :as renderer] ;; this is needed to bring the render implementations into scope
             [complete.core :as complete]
-            [gorilla-repl.worksheet-reader :as worksheet-reader])
+            [gorilla-repl.worksheet-export :as export])
   (:gen-class))
 
 ;; useful for debugging the nREPL requests
@@ -66,7 +66,7 @@
                           ws-file
                           (str ws-file ".html"))]
        (print (str "Exporting: " ws-file " ... "))
-       (spit ws-out-file (worksheet-reader/worksheet-str->standalone-html ws-data))
+       (spit ws-out-file (export/worksheet-str->standalone-html ws-data))
        (println (str "done. [" (java.util.Date.) "]"))
        (res/response {:status "ok"})))))
 
