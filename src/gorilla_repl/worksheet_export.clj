@@ -1,3 +1,7 @@
+;;;; This file is part of gorilla-repl. Copyright (C) 2014-, Jony Hudson and contributors.
+;;;;
+;;;; gorilla-repl is licenced to you under the MIT licence. See the file LICENCE.txt for full details.
+
 (ns gorilla-repl.worksheet-export
   (:require [cheshire.core :refer :all]
             [clojure.java.io :as io]
@@ -102,19 +106,6 @@
           [:script {:type "text/javascript"
                     :src  "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_SVG-full.js&amp;delayStartupUntil=configured"}]
           [:script {:type "text/javascript"}
-
-           "MathJax.Hub.Config({
-             messageStyle: \"none\",
-             showProcessingMessages: false,
-             skipStartupTypeset: true,
-             tex2jax: {
-              inlineMath: [
-               ['@@', '@@']
-              ]
-             }
-            });
-            MathJax.Hub.Configured();"]
-          [:script {:type "text/javascript"}
            (slurp (io/resource "public/jslib/codemirror-3.20/addon/runmode/runmode-standalone.js"))]
           [:script {:type "text/javascript"}
            (slurp (io/resource "public/jslib/codemirror-3.20/addon/runmode/colorize.js"))]
@@ -136,12 +127,23 @@
           [:script {:type "text/javascript"} "var converter = new Markdown.Converter();"]
           [:style (slurp (io/resource "public/css/worksheet.css"))]
           [:style (slurp (io/resource "public/css/output.css"))]
-          [:style (slurp (io/resource "public/jslib/codemirror-3.20/lib/codemirror.css"))]]
-
+          [:style (slurp (io/resource "public/jslib/codemirror-3.20/lib/codemirror.css"))]
+          [:script {:type "text/javascript"}
+           "$(function () {
+               MathJax.Hub.Config({
+               messageStyle: \"none\",
+               showProcessingMessages: false,
+               tex2jax: {
+                inlineMath: [
+                 ['@@', '@@']
+                ]
+               }
+              });
+              MathJax.Hub.Configured();
+              CodeMirror.colorize();
+            });"]]
          [:body
-          [:div#contents segments]
-          [:script "MathJax.Hub.Queue([\"Typeset\",MathJax.Hub]);
-                    CodeMirror.colorize();"]]]))
+          [:div#contents segments]]]))
 
 (defn worksheet-str->standalone-html
   [worksheet]
