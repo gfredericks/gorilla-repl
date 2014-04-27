@@ -17,6 +17,7 @@
                  [gorilla-renderable "1.0.0"]
                  [hiccup "1.0.5"]
                  [instaparse "1.3.1"]
+                 [markdown-clj "0.9.43"]
                  [org.clojure/data.codec "0.1.0"]]
   :main ^:skip-aot gorilla-repl.core
   :target-path "target/%s"

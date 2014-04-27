@@ -7,7 +7,8 @@
             [clojure.java.io :as io]
             [clojure.string :as string]
             [instaparse.core :as insta]
-            [hiccup.core :refer :all]))
+            [hiccup.core :refer :all]
+            [markdown.core :as md]))
 
 (defn uncomment
   [xs]
@@ -74,15 +75,7 @@
 
 (defn render-free-segment
   [a-free-segment]
-  (html [:div {:class "segment free"}
-         (str
-           "<script>
- var scriptTag = document.getElementsByTagName('script');
- scriptTag = scriptTag[scriptTag.length - 1];
- var parentTag = scriptTag.parentNode;
- parentTag.innerHTML = converter.makeHtml(\""
-           a-free-segment
-           \" ");</script>")]))
+  (html [:div {:class "segment free"} (md/md-to-html-string a-free-segment)]))
 
 (defn render-clojure-code
   [a-code-segment]
@@ -97,51 +90,31 @@
           [:link {:rel  "stylesheet"
                   :href "http://fonts.googleapis.com/css?family=Arvo:400,700,400italic,700italic|Lora:400,700,400italic,700italic"
                   :type "text/css"}]
-          [:script {:type "text/javascript"}
-           (slurp
-             (io/resource "public/jslib/jquery/jquery-1.10.2.min.js"))]
-          [:script {:type "text/javascript"}
-           (slurp
-             (io/resource "public/jslib/underscore/underscore.min.js"))]
-          [:script {:type "text/javascript"
-                    :src  "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_SVG-full.js&amp;delayStartupUntil=configured"}]
-          [:script {:type "text/javascript"}
-           (slurp (io/resource "public/jslib/codemirror-3.20/addon/runmode/runmode-standalone.js"))]
-          [:script {:type "text/javascript"}
-           (slurp (io/resource "public/jslib/codemirror-3.20/addon/runmode/colorize.js"))]
-          [:script {:type "text/javascript"}
-           (slurp (io/resource "public/jslib/codemirror-3.20/mode/clojure/clojure.js"))]
-          [:script {:type "text/javascript"}
-           (slurp (io/resource "public/jslib/markdown/Markdown.Converter.js"))]
-          [:script {:type "text/javascript"}
-           (slurp (io/resource "public/jslib/markdown/Markdown.Sanitizer.js"))]
-          [:script {:type "text/javascript"}
-           (slurp (io/resource "public/jslib/d3/d3.v3.min.js"))]
-          [:script {:type "text/javascript"}
-           (slurp (io/resource "public/jslib/d3/d3.geo.projection.min.js"))]
-          [:script {:type "text/javascript"}
-           (slurp (io/resource "public/jslib/vega/vega.1.3.3.min.js"))]
-          [:script {:type "text/javascript"}
-           (slurp (io/resource "public/jslib/uuid/uuid.core.js"))]
-          [:script {:type "text/javascript"} (slurp (io/resource "public/js/renderer.js"))]
-          [:script {:type "text/javascript"} "var converter = new Markdown.Converter();"]
           [:style (slurp (io/resource "public/css/worksheet.css"))]
           [:style (slurp (io/resource "public/css/output.css"))]
-          [:style (slurp (io/resource "public/jslib/codemirror-3.20/lib/codemirror.css"))]
-          [:script {:type "text/javascript"}
-           "$(function () {
-               MathJax.Hub.Config({
-               messageStyle: \"none\",
-               showProcessingMessages: false,
-               tex2jax: {
-                inlineMath: [
-                 ['@@', '@@']
-                ]
-               }
-              });
-              MathJax.Hub.Configured();
-              CodeMirror.colorize();
-            });"]]
+          [:link {:rel "stylesheet"
+                  :href "http://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.css"}]
+          [:script {:type "text/javascript"
+                    :src  "http://code.jquery.com/jquery-1.11.0.min.js"}]
+          [:script {:type "text/javascript"
+                    :src "http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"}]
+          [:script {:type "text/javascript"
+                    :src  "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_SVG-full.js&amp;delayStartupUntil=configured"}]
+          [:script {:type "text/javascript"
+                    :src "http://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/addon/runmode/runmode-standalone.js"}]
+          [:script {:type "text/javascript"
+                    :src "http://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/addon/runmode/colorize.js"}]
+          [:script {:type "text/javascript"
+                    :src  "http://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/clojure/clojure.js"}]
+          [:script {:type "text/javascript"
+                    :src  "http://d3js.org/d3.v3.min.js"}]
+          [:script {:type "text/javascript"
+                    :src  "http://cdnjs.cloudflare.com/ajax/libs/d3-geo-projection/0.2.9/d3.geo.projection.min.js"}]
+          [:script {:type "text/javascript"
+                    :src  "http://cdnjs.cloudflare.com/ajax/libs/vega/1.3.3/vega.min.js"}]
+          [:script {:type "text/javascript"} (slurp (io/resource "public/jslib/uuid/uuid.core.js"))]
+          [:script {:type "text/javascript"} (slurp (io/resource "public/js/renderer.js"))]
+          [:script {:type "text/javascript"} (slurp (io/resource "gorilla_repl/standalone.js"))]]
          [:body
           [:div#contents segments]]]))
 
