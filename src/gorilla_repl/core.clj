@@ -13,6 +13,7 @@
             [ring.util.response :as res]
             [clojure.tools.nrepl.server :as nrepl-server]
             [clojure.java.io :as io]
+            [gorilla-repl.preeval :refer [preeval]]
             [gorilla-repl.websocket-relay :as ws-relay]
             [gorilla-repl.render-values-mw :as render-mw]
             [gorilla-repl.renderer :as renderer] ;; this is needed to bring the render implementations into scope
@@ -42,6 +43,10 @@
     (let [_ (print (str "Loading: " ws-file " ... "))
           ws-data (slurp (str ws-file) :encoding "UTF-8")
           _ (println "done.")]
+      (try (preeval ws-data)
+           (catch Exception e
+             ;; how to return an error?
+             ))
       (res/response {:worksheet-data ws-data}))))
 
 
