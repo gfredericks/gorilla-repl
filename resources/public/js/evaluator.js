@@ -11,7 +11,7 @@ var evaluator = function () {
     var self = {};
 
     self.evaluationMap = {};
-    self.currentNamespace = "user";
+    self.currentNamespace = null;
 
     eventBus.on("evaluator:evaluate", function (e, d) {
         // generate an ID to tie the evaluation to its results - when responses are received, we route them to the
