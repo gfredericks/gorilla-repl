@@ -49,7 +49,7 @@
   ;; TODO: error handling!
   (spit file data)
   (println (str "done. [" (java.util.Date.) "]"))
-  {:status 200})
+  {:status 204})
 
 (defn create
   [file data]
