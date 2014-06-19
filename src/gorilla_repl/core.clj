@@ -44,18 +44,31 @@
           _ (println "done.")]
       (res/response {:worksheet-data ws-data}))))
 
+(defn update
+  [file data]
+  ;; TODO: error handling!
+  (spit file data)
+  (println (str "done. [" (java.util.Date.) "]"))
+  {:status 200})
+
+(defn create
+  [file data]
+  (if (.exists (io/as-file file))
+    (do
+      (println (str "failed to create " file " (filename already exists)"))
+      {:status 400})
+    (update file data)))
 
 ;; the client can post a request to have the worksheet saved, handled by the following
 (defn save
   [req]
-  ;; TODO: error handling!
   (when-let [ws-data (:worksheet-data (:params req))]
     (when-let [ws-file (:worksheet-filename (:params req))]
-      (print (str "Saving: " ws-file " ... "))
-      (spit ws-file ws-data)
-      (println (str "done. [" (java.util.Date.) "]"))
-      (res/response {:status "ok"}))))
-
+      (when-let [mode (:persistence-mode (:params req))]
+        (print (str "Saving: " ws-file " ... "))
+        (case mode
+          "create" (create ws-file ws-data)
+          "update" (update ws-file ws-data))))))
 
 ;; API endpoint for getting completions
 (defn completions
