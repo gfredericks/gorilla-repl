@@ -31,7 +31,7 @@ var app = (function () {
                 ko.applyBindings(wsWrapper, document.getElementById("document"));
 
                 // use a unique initial namespace, to ensure sessions are sandboxed from any other users by default
-                eventBus.trigger("evaluator:evaluate", {code: "(ns session-" + repl.sessionID + ")", segmentID: null});
+                eventBus.trigger("evaluator:evaluate", {code: "(ns " + generateCodeName(2) + ")", segmentID: null});
 
                 // make it easier for the user to get started by highlighting the empty code segment
                 eventBus.trigger("worksheet:segment-clicked", {id: ws.segments()[1].id});
