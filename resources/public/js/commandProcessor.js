@@ -167,6 +167,15 @@ commandList = [
         action: function () {
             eventBus.trigger("app:save");
         }
+    },
+    {
+        name: "command:app:saveAs",
+        desc: "Save a copy of the worksheet using a new name.",
+        showInMenu: true,
+        kb: combo('g', 'r'),
+        action: function () {
+            eventBus.trigger("app:saveAs");
+        }
     }
 ];
 

@@ -105,7 +105,12 @@ var app = (function () {
         if (filename !== "") {
             saveToFile(filename);
         } else {
-            prompt('Filename (relative to project directory):',
+            savetoNewFile();
+        }
+    });
+
+    var savetoNewFile = function () {
+        prompt('Filename (relative to project directory):',
             function (filename) {
                 if (filename) {
                     saveToFile(filename, function() {
@@ -113,8 +118,11 @@ var app = (function () {
                         self.wrapper.filename(filename);
                     });
                 }
-            })
-        }
+        })
+    };
+
+    eventBus.on("app:saveAs", function () {
+        savetoNewFile();
     });
 
     eventBus.on("app:connection-lost", function () {
